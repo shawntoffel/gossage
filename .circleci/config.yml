@@ -3,18 +3,10 @@ jobs:
   build:
     docker:
       - image: golang:1.11
-
       - image: cockroachdb/cockroach
         command: start --insecure
 
     working_directory: /go/src/github.com/shawntoffel/gossage
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - pkg-sum-{{ checksum "go.mod" }}
       - run: make
-      - save_cache:
-          key: pkg-sum-{{ checksum "go.mod" }}
-          paths:
-            - "/go/pkg"
