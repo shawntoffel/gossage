@@ -3,8 +3,6 @@ package gossage
 import (
 	"database/sql"
 	"testing"
-
-	_ "github.com/lib/pq"
 )
 
 func Db() (*sql.DB, error) {

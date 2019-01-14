@@ -3,6 +3,8 @@ package gossage
 import (
 	"database/sql"
 	"time"
+
+	_ "github.com/lib/pq"
 )
 
 type Version struct {
