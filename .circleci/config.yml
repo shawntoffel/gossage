@@ -7,9 +7,6 @@ jobs:
       - image: cockroachdb/cockroach
         command: start --insecure
 
-      - image: cockroachdb/cockroach
-        command: sql --insecure -e "CREATE USER test; CREATE DATABASE test; GRANT ALL ON DATABASE test to test;"
-
     working_directory: /go/src/github.com/shawntoffel/gossage
     steps:
       - checkout

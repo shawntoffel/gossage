@@ -8,7 +8,7 @@ import (
 )
 
 func Db() (*sql.DB, error) {
-	return sql.Open("postgres", "postgresql://test@localhost:26257/test?sslmode=disable")
+	return sql.Open("postgres", "postgresql://root@localhost:26257/defaultdb?sslmode=disable")
 }
 
 func TestMigrationHistory(t *testing.T) {
