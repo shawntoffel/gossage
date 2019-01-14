@@ -23,19 +23,21 @@ func New(db *sql.DB) (*Gossage, error) {
 	return g, err
 }
 
-func (g *Gossage) RegisterMigration(m Migration) error {
+func (g *Gossage) RegisterMigrations(migrations ...Migration) error {
 	if g.migrations == nil {
 		g.migrations = map[string]Migration{}
 	}
 
-	version := m.Version()
+	for _, m := range migrations {
+		version := m.Version()
 
-	_, exists := g.migrations[version]
-	if exists {
-		return fmt.Errorf("gossage: a migration with version '%s' has already been registered.", version)
+		_, exists := g.migrations[version]
+		if exists {
+			return fmt.Errorf("gossage: a migration with version '%s' has already been registered.", version)
+		}
+
+		g.migrations[version] = m
 	}
-
-	g.migrations[version] = m
 
 	return nil
 }

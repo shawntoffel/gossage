@@ -24,12 +24,7 @@ func TestMigrationHistory(t *testing.T) {
 		return
 	}
 
-	err = gossage.RegisterMigration(migration1{})
-	if err != nil {
-		t.Error(err)
-		return
-	}
-	err = gossage.RegisterMigration(migration2{})
+	err = gossage.RegisterMigrations(migration1{}, migration2{})
 	if err != nil {
 		t.Error(err)
 		return
