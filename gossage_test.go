@@ -24,7 +24,16 @@ func TestMigrationHistory(t *testing.T) {
 		return
 	}
 
-	gossage.RegisterMigration(migration1{})
+	err = gossage.RegisterMigration(migration1{})
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	err = gossage.RegisterMigration(migration2{})
+	if err != nil {
+		t.Error(err)
+		return
+	}
 
 	err = gossage.Up()
 	if err != nil {
@@ -42,5 +51,17 @@ func (m migration1) Up(tx *sql.Tx) error {
 	return nil
 }
 func (m migration1) Down(tx *sql.Tx) error {
+	return nil
+}
+
+type migration2 struct{}
+
+func (m migration2) Version() string {
+	return "0002"
+}
+func (m migration2) Up(tx *sql.Tx) error {
+	return nil
+}
+func (m migration2) Down(tx *sql.Tx) error {
 	return nil
 }

@@ -42,7 +42,7 @@ func (mh *MigrationHistory) LatestVersion() (Version, error) {
 	version := Version{}
 
 	q := `SELECT id, version, created FROM gossage_migration_history
-			ORDER BY created DESC LIMIT 1`
+			ORDER BY version DESC LIMIT 1`
 
 	err := mh.db.QueryRow(q).Scan(&version.Id, &version.Version, &version.Created)
 
