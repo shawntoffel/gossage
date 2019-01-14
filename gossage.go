@@ -79,7 +79,10 @@ func (g *Gossage) Up() error {
 			return err
 		}
 
-		g.history.AddMigration(m)
+		err = g.history.AddMigration(m)
+		if err != nil {
+			return err
+		}
 		msglog("completed migration %s", m.Version())
 	}
 
@@ -97,7 +100,7 @@ func (g *Gossage) DownTo(version string) error {
 	for _, v := range migrationVersionsToRevert {
 		m, ok := g.migrations[v]
 		if !ok {
-			return fmt.Errorf("could not find registered migration for version: %s", v)
+			return fmt.Errorf("gossage: could not find registered migration for version: %s", v)
 		}
 
 		tx, err := g.db.Begin()
