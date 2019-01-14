@@ -3,21 +3,10 @@ jobs:
   build:
     docker:
       - image: golang:1.11
-
       - image: cockroachdb/cockroach
         command: start --insecure
-
-      - image: cockroachdb/cockroach
-        command: sql --insecure -e "CREATE USER test; CREATE DATABASE test; GRANT ALL ON DATABASE test to test;"
 
     working_directory: /go/src/github.com/shawntoffel/gossage
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - pkg-sum-{{ checksum "go.mod" }}
       - run: make
-      - save_cache:
-          key: pkg-sum-{{ checksum "go.mod" }}
-          paths:
-            - "/go/pkg"

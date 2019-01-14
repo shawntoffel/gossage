@@ -8,7 +8,7 @@ import (
 )
 
 func Db() (*sql.DB, error) {
-	return sql.Open("postgres", "postgresql://test@localhost:26257/test?sslmode=disable")
+	return sql.Open("postgres", "postgresql://root@localhost:26257/defaultdb?sslmode=disable")
 }
 
 func TestMigrationHistory(t *testing.T) {
@@ -24,12 +24,7 @@ func TestMigrationHistory(t *testing.T) {
 		return
 	}
 
-	err = gossage.RegisterMigration(migration1{})
-	if err != nil {
-		t.Error(err)
-		return
-	}
-	err = gossage.RegisterMigration(migration2{})
+	err = gossage.RegisterMigrations(migration1{}, migration2{})
 	if err != nil {
 		t.Error(err)
 		return
@@ -40,28 +35,38 @@ func TestMigrationHistory(t *testing.T) {
 		t.Error(err)
 		return
 	}
+
+	err = gossage.DownTo("0001_migration1")
+	if err != nil {
+		t.Error(err)
+		return
+	}
 }
 
 type migration1 struct{}
 
 func (m migration1) Version() string {
-	return "0001"
+	return "0001_migration1"
 }
 func (m migration1) Up(tx *sql.Tx) error {
-	return nil
+	_, err := tx.Exec(`CREATE TABLE test1 (id UUID PRIMARY KEY NOT NULL)`)
+	return err
 }
 func (m migration1) Down(tx *sql.Tx) error {
-	return nil
+	_, err := tx.Exec(`DROP TABLE test1`)
+	return err
 }
 
 type migration2 struct{}
 
 func (m migration2) Version() string {
-	return "0002"
+	return "0002_migration2"
 }
 func (m migration2) Up(tx *sql.Tx) error {
-	return nil
+	_, err := tx.Exec(`CREATE TABLE test2 (id UUID PRIMARY KEY NOT NULL)`)
+	return err
 }
 func (m migration2) Down(tx *sql.Tx) error {
-	return nil
+	_, err := tx.Exec(`DROP TABLE test2`)
+	return err
 }
