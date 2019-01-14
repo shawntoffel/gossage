@@ -3,6 +3,13 @@ jobs:
   build:
     docker:
       - image: golang:1.11
+
+      - image: cockraochdb/cockroach
+        command: start --insecure
+
+      - image: cockraochdb/cockroach
+        command: sql --insecure -e "CREATE USER test; CREATE DATABASE test; GRANT ALL ON DATABASE test to test;"
+
     working_directory: /go/src/github.com/shawntoffel/gossage
     steps:
       - checkout
