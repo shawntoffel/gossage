@@ -16,6 +16,6 @@ func main() {
 
 	err := cli.GenerateMigrationFile(migrationName)
 	if err != nil {
-		fmt.Errorf("could not generate migration file: %s", err)
+		fmt.Printf("gossage: could not generate migration file: %s", err)
 	}
 }
