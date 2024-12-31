@@ -24,7 +24,7 @@ func NewMigrationHistory(db *sql.DB) *MigrationHistory {
 func (mh *MigrationHistory) Initialize() error {
 	q := `CREATE TABLE IF NOT EXISTS gossage_migration_history (
 			id uuid PRIMARY KEY NOT NULL DEFAULT gen_random_uuid(),
-			version STRING UNIQUE NOT NULL,
+			version TEXT UNIQUE NOT NULL,
 			applied BOOL NOT NULL DEFAULT false,
 			created TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 			updated TIMESTAMPTZ
