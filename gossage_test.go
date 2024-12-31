@@ -2,13 +2,18 @@ package gossage
 
 import (
 	"database/sql"
+	"os"
 	"testing"
 
 	_ "github.com/lib/pq"
 )
 
 func Db() (*sql.DB, error) {
-	return sql.Open("postgres", "postgresql://root@localhost:26257/defaultdb?sslmode=disable")
+	dbURL := os.Getenv("GOSSAGE_TEST_CONNECTION_STRING")
+	if len(dbURL) < 1 {
+		dbURL = "postgresql://root@localhost:26257/defaultdb?sslmode=disable"
+	}
+	return sql.Open("postgres", dbURL)
 }
 
 func TestMigrationHistory(t *testing.T) {

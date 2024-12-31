@@ -1,0 +1,31 @@
+name: Test
+
+on:
+  push:
+    branches: '*'
+    tags: '*'
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    
+    container: golang:1.23
+    
+    services:
+      cockroachdb:
+        image: cockroachdb/cockroach
+        env:
+          COCKROACH_ARGS: "start-single-node --insecure"
+        options: >-
+          --health-cmd "curl -f http://localhost:8080/health?ready=1"
+          --health-interval 5s
+      
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build
+      run: make
+      env:
+        GOSSAGE_TEST_CONNECTION_STRING: "postgresql://root@cockroachdb:26257/defaultdb?sslmode=disable"
